@@ -11458,7 +11458,10 @@ try {
   if (!appFilePath) {
     core.warning('appFilePath was not set');
   }
-  uploadOptions.filePath = appFilePath;
+	
+  var obj = JSON.parse(appFilePath);
+  core.info(`set obj.include[1].path`);
+  uploadOptions.filePath = obj.include[0].path;
 
   const otherParams = [
     "buildInstallType",
@@ -11490,28 +11493,28 @@ try {
   core.info(`filePath: ${appFilePath}`);
   core.info(`buildType: ${uploadOptions.buildType}`);
 
-  const uploader = new PGYERAppUploader(apiKey);
-  uploader.upload(uploadOptions).then(function (info) {
-    core.info(`upload success. app info:`);
-    core.info(JSON.stringify(info));
-    core.setOutput("buildName", info.data.buildName);
-    core.setOutput("buildKey", info.data.buildKey);
-    core.setOutput("buildIdentifier", info.data.buildIdentifier);
-    core.setOutput("buildType", info.data.buildType);
-    core.setOutput("buildIsFirst", info.data.buildIsFirst);
-    core.setOutput("buildIsLastest", info.data.buildIsLastest);
-    core.setOutput("buildVersion", info.data.buildVersion);
-    core.setOutput("buildVersionNo", info.data.buildVersionNo);
-    core.setOutput("buildBuildVersion", info.data.buildBuildVersion);
-    core.setOutput("buildDescription", info.data.buildName);
-    core.setOutput("buildUpdateDescription", info.data.buildDescription);
-    core.setOutput("buildCreated", info.data.buildCreated);
-    core.setOutput("buildUpdated", info.data.buildUpdated);
-    core.setOutput("buildQRCodeURL", info.data.buildQRCodeURL);
-    core.setOutput("buildShortcutUrl", info.data.buildShortcutUrl);
-    core.setOutput("buildScreenShots", info.data.buildScreenshots);
-    core.setOutput("buildIconUrl", `https://appicon.pgyer.com/image/view/app_icons/${info.data.buildIcon}`);
-  }).catch(console.error);
+//   const uploader = new PGYERAppUploader(apiKey);
+//   uploader.upload(uploadOptions).then(function (info) {
+//     core.info(`upload success. app info:`);
+//     core.info(JSON.stringify(info));
+//     core.setOutput("buildName", info.data.buildName);
+//     core.setOutput("buildKey", info.data.buildKey);
+//     core.setOutput("buildIdentifier", info.data.buildIdentifier);
+//     core.setOutput("buildType", info.data.buildType);
+//     core.setOutput("buildIsFirst", info.data.buildIsFirst);
+//     core.setOutput("buildIsLastest", info.data.buildIsLastest);
+//     core.setOutput("buildVersion", info.data.buildVersion);
+//     core.setOutput("buildVersionNo", info.data.buildVersionNo);
+//     core.setOutput("buildBuildVersion", info.data.buildBuildVersion);
+//     core.setOutput("buildDescription", info.data.buildName);
+//     core.setOutput("buildUpdateDescription", info.data.buildDescription);
+//     core.setOutput("buildCreated", info.data.buildCreated);
+//     core.setOutput("buildUpdated", info.data.buildUpdated);
+//     core.setOutput("buildQRCodeURL", info.data.buildQRCodeURL);
+//     core.setOutput("buildShortcutUrl", info.data.buildShortcutUrl);
+//     core.setOutput("buildScreenShots", info.data.buildScreenshots);
+//     core.setOutput("buildIconUrl", `https://appicon.pgyer.com/image/view/app_icons/${info.data.buildIcon}`);
+//   }).catch(console.error);
 
 } catch (error) {
   core.setFailed(error.message);
