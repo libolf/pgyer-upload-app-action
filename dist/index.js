@@ -11448,7 +11448,7 @@ const PGYERAppUploader = __nccwpck_require__(5248);
 
 try {
   const uploadOptions = {
-    log: false,
+    log: true,
   }
 
   const apiKey = core.getInput('_api_key', { required: true });
