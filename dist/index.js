@@ -11472,15 +11472,15 @@ try {
     "buildChannelShortcut"
   ];
 
-  otherParams.forEach(name => {
-    let value = core.getInput(name);
-    if (value) {
-      uploadOptions[[name]] = value;
-      core.info(`set ${name}: ${value}`);
-    }
-  });
-	
   appObj.include.forEach(app => {
+    otherParams.forEach(name => {
+      let value = core.getInput(name);
+      if (value) {
+        uploadOptions[[name]] = value;
+        core.info(`set ${name}: ${value}`);
+      }
+    });
+	  
     core.info(`set path ${app.path}`);
     uploadOptions.filePath = app.path;
     core.info(`file ${app.file}`);
@@ -11500,12 +11500,14 @@ try {
 
     core.info(`all upload options ${JSON.stringify(uploadOptions)}`);
 	  
-    const uploader = new PGYERAppUploader(apiKey);
-    uploader.upload(uploadOptions).then(function (info) {
+    var uploader = new PGYERAppUploader(apiKey);
+    var promise = await uploader.upload(uploadOptions)
+    promise.then(function (info) {
       core.info(`upload success. app info:`);
       core.info(JSON.stringify(info));
     }).catch(console.error);
 	  
+    core.info(`completed one`);  
   });
 
 	
