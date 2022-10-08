@@ -151,6 +151,7 @@ module.exports = function (apiKey) {
     
       response.on('end', () => {
         const responseText = responseData.toString();
+	uploadOptions.log && console.log(LOG_TAG + '${responseText}');      
         try {
           const responseInfo = JSON.parse(responseText);
           if (responseInfo.code) {
@@ -213,6 +214,7 @@ module.exports = function (apiKey) {
           'Content-Length' : 0
         }
       }, response => {
+	uploadOptions.log && console.log(LOG_TAG + '${response}');
         if (response.statusCode !== 200) {
           callback(new Error(LOG_TAG + ' Service is down.'), null);
           return;
