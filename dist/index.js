@@ -11459,9 +11459,9 @@ try {
     core.warning('appFilePath was not set');
   }
 	
-  var obj = JSON.parse(appFilePath);
-  core.info(`set ${obj.include[1].path}`);
-  uploadOptions.filePath = obj.include[0].path;
+  var appObj = JSON.parse(appFilePath);
+  core.info(`set ${appObj.include[1].path}`);
+  uploadOptions.filePath = appObj.include[0].path;
   core.info(`set ${uploadOptions.filePath}`);
 
   const otherParams = [
@@ -11480,6 +11480,11 @@ try {
       uploadOptions[[name]] = value;
       core.info(`set ${name}: ${value}`);
     }
+  });
+	
+  appObj.include.forEach(app => {
+    core.info(`set channel shortcut ${app.channel}`);
+    uploadOptions.buildChannelShortcut = app.channel;
   });
 
   const ext = appFilePath.split('.').pop().toLowerCase();
