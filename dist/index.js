@@ -11498,7 +11498,7 @@ try {
     }
     core.info(`buildType: ${uploadOptions.buildType}`);
 
-    core.info(`all upload options ${uploadOptions}`);
+    core.info(`all upload options ${JSON.stringify(uploadOptions)}`);
 	  
     const uploader = new PGYERAppUploader(apiKey);
     uploader.upload(uploadOptions).then(function (info) {
