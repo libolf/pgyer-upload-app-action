@@ -11488,7 +11488,7 @@ try {
     core.info(`file ${app.file}`);
     core.info(`apk ${app.apk}`);
     core.info(`set channel shortcut ${app.channel}`);
-    uploadOptions.buildChannelShortcut = 'qwe';
+    uploadOptions.buildChannelShortcut = app.channel;
     
     const ext = app.path.split('.').pop().toLowerCase();
     if (ext == 'ipa') {
