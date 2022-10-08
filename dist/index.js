@@ -11460,8 +11460,9 @@ try {
   }
 	
   var obj = JSON.parse(appFilePath);
-  core.info(`set obj.include[1].path`);
+  core.info(`set ${obj.include[1].path}`);
   uploadOptions.filePath = obj.include[0].path;
+  core.info(`set ${uploadOptions.filePath}`);
 
   const otherParams = [
     "buildInstallType",
