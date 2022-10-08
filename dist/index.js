@@ -11460,9 +11460,7 @@ try {
   }
 	
   var appObj = JSON.parse(appFilePath);
-  core.info(`set ${appObj.include[1].path}`);
-  uploadOptions.filePath = appObj.include[0].path;
-  core.info(`set ${uploadOptions.filePath}`);
+  core.info(`filePath: ${appFilePath}`);
 
   const otherParams = [
     "buildInstallType",
@@ -11483,21 +11481,34 @@ try {
   });
 	
   appObj.include.forEach(app => {
+    core.info(`set path ${app.path}`);
+    uploadOptions.filePath = app.path;
+    core.info(`file ${app.file}`);
+    core.info(`apk ${app.apk}`);
     core.info(`set channel shortcut ${app.channel}`);
     uploadOptions.buildChannelShortcut = app.channel;
+    
+    const ext = app.path.split('.').pop().toLowerCase();
+    if (ext == 'ipa') {
+      uploadOptions.buildType = 'ios';
+    } else if (ext == 'apk') {
+      uploadOptions.buildType = 'android';
+    } else {
+      core.warning(`Unsupported file type: ${ext}`);
+    }
+    core.info(`buildType: ${uploadOptions.buildType}`);
+
+    const uploader = new PGYERAppUploader(apiKey);
+    uploader.upload(uploadOptions).then(function (info) {
+      core.info(`upload success. app info:`);
+      core.info(JSON.stringify(info));
+    }).catch(console.error);
+	  
   });
 
-  const ext = appFilePath.split('.').pop().toLowerCase();
-  if (ext == 'ipa') {
-    uploadOptions.buildType = 'ios';
-  } else if (ext == 'apk') {
-    uploadOptions.buildType = 'android';
-  } else {
-    core.warning(`Unsupported file type: ${ext}`);
-  }
+	
+  
 
-  core.info(`filePath: ${appFilePath}`);
-  core.info(`buildType: ${uploadOptions.buildType}`);
 
 //   const uploader = new PGYERAppUploader(apiKey);
 //   uploader.upload(uploadOptions).then(function (info) {
