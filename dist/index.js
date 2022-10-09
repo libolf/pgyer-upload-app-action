@@ -131,7 +131,7 @@ module.exports = function (apiKey) {
     // step 1: get app upload token
     const uploadTokenRequestData = querystring.stringify({ ...uploadOptions, _api_key: apiKey });
     
-    uploadOptions.log && console.log(LOG_TAG + ' Check API Key ... Please Wait ...');
+    uploadOptions.log && console.log(LOG_TAG + ' Check API Key ... Please Wait ...' + uploadTokenRequestData.toString());
     const uploadTokenRequest = https.request({
       hostname: 'www.pgyer.com',
       path: '/apiv2/app/getCOSToken',
@@ -141,6 +141,7 @@ module.exports = function (apiKey) {
         'Content-Length' : uploadTokenRequestData.length
       }
     }, response => {
+        uploadOptions.log && console.log(LOG_TAG + ' step1 ' + response.toString());
       if (response.statusCode !== 200) {
         callback(new Error(LOG_TAG + 'Service down: cannot get upload token.'), null);
         return;
@@ -215,6 +216,7 @@ module.exports = function (apiKey) {
           'Content-Length' : 0
         }
       }, response => {
+        uploadOptions.log && console.log(LOG_TAG + ' step3' + response.toString());
         if (response.statusCode !== 200) {
           callback(new Error(LOG_TAG + ' Service is down.'), null);
           return;
@@ -11474,6 +11476,8 @@ try {
     "buildChannelShortcut"
   ];
 
+  var promiseList = []
+
   appObj.include.forEach(app => {
     otherParams.forEach(name => {
       let value = core.getInput(name);
@@ -11505,6 +11509,7 @@ try {
     var uploader = new PGYERAppUploader(apiKey);
     var promise = uploader.upload(uploadOptions)
     core.info(`promise is ${JSON.stringify(promise)} ${typeof promise}`);
+    promiseList.push(promise)
 
     // uploader.upload({ buildType: 'ios', filePath: './app.ipa' }).then(function (data) {
     //   // code here
@@ -11512,12 +11517,17 @@ try {
     //   // code here
     // })
 
-    promise.then(function (info) {
-      core.info(`upload success. app info:`);
-      core.info(JSON.stringify(info));
-    }).catch(console.error);
+    // promise.then(function (info) {
+    //   core.info(`upload success. app info:`);
+    //   core.info(JSON.stringify(info));
+    // }).catch(console.error);
 	  
     core.info(`completed one`);  
+  });
+
+  Promise.all(promiseList).then((info)=>{
+    core.info(`upload success. app info:`);
+    core.info(JSON.stringify(info));
   });
 
 	
