@@ -193,6 +193,8 @@ module.exports = function (apiKey) {
       uploadAppRequestData.append('key', uploadData.data.params.key);
       uploadAppRequestData.append('file', fs.createReadStream(uploadOptions.filePath));
 
+      uploadOptions.log && console.log(LOG_TAG + ' step2 uploadData signature ' + uploadData.data.params.signature + '\ntoken ' + uploadData.data.params['x-cos-security-token'] + '\nkey ' + uploadData.data.params.key + '\nfile ' + uploadOptions.filePath);
+
       uploadAppRequestData.submit(uploadData.data.endpoint, function (error, response) {
         if (error) {
           callback(error, null);
