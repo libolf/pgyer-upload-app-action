@@ -11502,7 +11502,7 @@ try {
 	  
     var uploader = new PGYERAppUploader(apiKey);
     var promise = uploader.upload(uploadOptions)
-    core.info(`promise is ${JSON.stringify(promise)}`);
+    core.info(`promise is ${JSON.stringify(promise)} ${typeof promise}`);
     promise.then(function (info) {
       core.info(`upload success. app info:`);
       core.info(JSON.stringify(info));
