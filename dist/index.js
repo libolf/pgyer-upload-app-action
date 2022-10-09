@@ -141,7 +141,7 @@ module.exports = function (apiKey) {
         'Content-Length' : uploadTokenRequestData.length
       }
     }, response => {
-        uploadOptions.log && console.log(LOG_TAG + ' step1 ' + response + ' ' + JSON.stringify(response));
+        uploadOptions.log && console.log(LOG_TAG + ' step1 ' + response);
       if (response.statusCode !== 200) {
         callback(new Error(LOG_TAG + 'Service down: cannot get upload token.'), null);
         return;
@@ -217,7 +217,7 @@ module.exports = function (apiKey) {
           'Content-Length' : 0
         }
       }, response => {
-        uploadOptions.log && console.log(LOG_TAG + ' step3' + response + ' ' + JSON.stringify(response));
+        uploadOptions.log && console.log(LOG_TAG + ' step3' + response);
         if (response.statusCode !== 200) {
           callback(new Error(LOG_TAG + ' Service is down.'), null);
           return;
