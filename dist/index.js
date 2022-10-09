@@ -11450,6 +11450,73 @@ const github = __nccwpck_require__(96);
 const PGYERAppUploader = __nccwpck_require__(5248);
 
 try {
+
+//   const apiKey = core.getInput('_api_key', { required: true });
+//   if (!apiKey) {
+//     core.warning('apiKey was not set');
+//   }
+
+//   const appFilePath = core.getInput('appFilePath', { required: true });
+//   if (!appFilePath) {
+//     core.warning('appFilePath was not set');
+//   }
+
+//   async function uploadMain(){
+//     var uploadOptions = {
+//       log: true,
+//     }
+
+//     var appObj = JSON.parse(appFilePath);
+//     core.info(`filePath: ${appFilePath}`);
+
+//     var otherParams = [
+//         "buildInstallType",
+//         "buildPassword",
+//         "buildUpdateDescription",
+//         "buildInstallDate",
+//         "buildInstallStartDate",
+//         "buildInstallEndDate",
+//         "buildChannelShortcut"
+//       ];
+
+//     appObj.include.forEach(app => {
+//       otherParams.forEach(name => {
+//         let value = core.getInput(name);
+//         if (value) {
+//           uploadOptions[[name]] = value;
+//           core.info(`set ${name}: ${value}`);
+//         }
+//       });
+          
+//       core.info(`set path ${app.path}`);
+//       uploadOptions.filePath = app.path;
+//       core.info(`file ${app.file}`);
+//       core.info(`apk ${app.apk}`);
+//       core.info(`set channel shortcut ${app.channel}`);
+//       uploadOptions.buildChannelShortcut = app.channel;
+        
+//       const ext = app.path.split('.').pop().toLowerCase();
+//       if (ext == 'ipa') {
+//         uploadOptions.buildType = 'ios';
+//       } else if (ext == 'apk') {
+//         uploadOptions.buildType = 'android';
+//       } else {
+//         core.warning(`Unsupported file type: ${ext}`);
+//       }
+//       core.info(`buildType: ${uploadOptions.buildType}`);
+    
+//       core.info(`all upload options ${JSON.stringify(uploadOptions)}`);
+
+//       uploadFile(apiKey, uploadOptions)
+    
+//     });
+//   }
+
+//   async function uploadFile(apiKey, uploadOptions){
+//     var uploader = new PGYERAppUploader(apiKey);
+//     return uploader.upload(uploadOptions)
+//   }
+
   const uploadOptions = {
     log: true,
   }
@@ -11528,9 +11595,28 @@ try {
     core.info(`completed one`);  
   });
 
-  Promise.all(promiseList).then((info)=>{
+  syncPromise(arr).then(result=>{
+    console.log(result);
+    console.log('完成了');
+  })
+  // 或者 添加到Promise类中方法
+  Promise.syncAll = function syncAll(){
+    return syncPromise
+  }
+  // 以后可以直接使用
+//   Promise.syncAll(arr).then(result=>{
+//     console.log(result);
+//     console.log('完成了');
+//   })
+
+//   Promise.all(promiseList).then((info)=>{
+//     core.info(`upload success. app info:`);
+//     core.info(JSON.stringify(info));
+//   });
+
+  Promise.syncAll(promiseList).then(result=>{
     core.info(`upload success. app info:`);
-    core.info(JSON.stringify(info));
+    core.info(JSON.stringify(result));
   });
 
   function getSomething() {
