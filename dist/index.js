@@ -11575,9 +11575,10 @@ try {
     core.info(`all upload options ${JSON.stringify(uploadOptions)}`);
 	  
     var uploader = new PGYERAppUploader(apiKey);
-    var promise = uploader.upload(uploadOptions)
-    core.info(`promise is ${JSON.stringify(promise)} ${typeof promise}`);
-    promiseList.push(promise)
+    promiseList.push(uploader.upload)
+    // var promise = uploader.upload(uploadOptions)
+    // core.info(`promise is ${JSON.stringify(promise)} ${typeof promise}`);
+    // promiseList.push(promise)
 
     // uploader.upload({ buildType: 'ios', filePath: './app.ipa' }).then(function (data) {
     //   // code here
@@ -11599,9 +11600,9 @@ try {
   const syncPromise = function (arr) {
     const _syncLoop = function (count) {
       if (count === arr.length - 1) { // 是最后一个就直接return
-        return arr[count]()
+        return arr[count](uploadOptions)
       }
-      return arr[count]().then((result)=>{
+      return arr[count](uploadOptions).then((result)=>{
         console.log(result);
         return _syncLoop(count+1) // 递归调用数组下标
       });
