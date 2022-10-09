@@ -11528,13 +11528,26 @@ try {
     core.info(`completed one`);  
   });
 
-//   Promise.all(promiseList).then((info)=>{
-//     core.info(`upload success. app info:`);
-//     core.info(JSON.stringify(info));
-//   });
+  Promise.all(promiseList).then((info)=>{
+    core.info(`upload success. app info:`);
+    core.info(JSON.stringify(info));
+  });
 
-  Promise.allSettled(promiseList).then((result) => console.log(result));
-  
+  function getSomething() {
+    return "something";
+  }
+    
+  async function testAsync() {
+    return Promise.resolve("hello async");
+  }
+    
+  async function test() {
+    const v1 = await getSomething();
+    const v2 = await testAsync();
+    console.log(v1, v2);
+  }
+    
+  test();
 
 
 //   const uploader = new PGYERAppUploader(apiKey);
