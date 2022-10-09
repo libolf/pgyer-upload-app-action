@@ -11609,25 +11609,21 @@ try {
     return _syncLoop(0);
   }
 
-  // 或者 添加到Promise类中方法
-  Promise.syncAll = function syncAll(){
-    return syncPromise
-  }
-  // 以后可以直接使用
-//   Promise.syncAll(arr).then(result=>{
-//     console.log(result);
-//     console.log('完成了');
-//   })
+  syncPromise(promiseList).then(result=>{
+    core.info(`upload success. app info:`);
+    core.info(JSON.stringify(result));
+  })
+
 
 //   Promise.all(promiseList).then((info)=>{
 //     core.info(`upload success. app info:`);
 //     core.info(JSON.stringify(info));
 //   });
 
-  Promise.syncAll(promiseList).then(result=>{
-    core.info(`upload success. app info:`);
-    core.info(JSON.stringify(result));
-  });
+//   Promise.syncAll(promiseList).then(result=>{
+//     core.info(`upload success. app info:`);
+//     core.info(JSON.stringify(result));
+//   });
 
   function getSomething() {
     return "something";
