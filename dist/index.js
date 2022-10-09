@@ -108,9 +108,11 @@ module.exports = function (apiKey) {
     ) {
       uploadOptions = options;
       if (typeof callback === 'function') {
+        uploadOptions.log && console.log(LOG_TAG + ' is function ');
         uploadApp(callback);
         return null;
       } else {
+        uploadOptions.log && console.log(LOG_TAG + ' is promise ');
         return new Promise(function(resolve, reject) {
           uploadApp(function (error, data) {
             if (error === null) {
@@ -11503,6 +11505,13 @@ try {
     var uploader = new PGYERAppUploader(apiKey);
     var promise = uploader.upload(uploadOptions)
     core.info(`promise is ${JSON.stringify(promise)} ${typeof promise}`);
+
+    // uploader.upload({ buildType: 'ios', filePath: './app.ipa' }).then(function (data) {
+    //   // code here
+    // }).catch(fucntion (error) {
+    //   // code here
+    // })
+
     promise.then(function (info) {
       core.info(`upload success. app info:`);
       core.info(JSON.stringify(info));
