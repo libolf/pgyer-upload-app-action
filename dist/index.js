@@ -11595,10 +11595,20 @@ try {
     core.info(`completed one`);  
   });
 
-  syncPromise(arr).then(result=>{
-    console.log(result);
-    console.log('完成了');
-  })
+  
+  const syncPromise = function (arr) {
+    const _syncLoop = function (count) {
+      if (count === arr.length - 1) { // 是最后一个就直接return
+        return arr[count]()
+      }
+      return arr[count]().then((result)=>{
+        console.log(result);
+        return _syncLoop(count+1) // 递归调用数组下标
+      });
+    }
+    return _syncLoop(0);
+  }
+
   // 或者 添加到Promise类中方法
   Promise.syncAll = function syncAll(){
     return syncPromise
