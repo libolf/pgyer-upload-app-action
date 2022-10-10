@@ -11525,13 +11525,16 @@ try {
   });
 
   var uploadSuccessCount = 0
+  var allData = []
 
+  // https://segmentfault.com/a/1190000016788484
   const syncPromise = function (arr, optionsArray) {
     const _syncLoop = function (count) {
       if (count === arr.length - 1) { // 是最后一个就直接return
         return arr[count](optionsArray[count])
       }
       return arr[count](optionsArray[count]).then((result)=>{
+        allData.push(result.data)
         core.info(`upload success. app info: upload success count ${uploadSuccessCount}`);    
         core.info(JSON.stringify(result));
         return _syncLoop(count+1) // 递归调用数组下标
@@ -11541,8 +11544,11 @@ try {
   }
 
   syncPromise(promiseList, optionsArray).then(result=>{
+    allData.push(result.data)
     core.info(`upload success. app info:`);
     core.info(JSON.stringify(result));
+
+    core.info(`\n\nall data ${JSON.stringify(allData)}`);
   })
 
 
