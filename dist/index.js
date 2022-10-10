@@ -191,6 +191,7 @@ module.exports = function (apiKey) {
       uploadAppRequestData.append('signature', uploadData.data.params.signature);
       uploadAppRequestData.append('x-cos-security-token', uploadData.data.params['x-cos-security-token']);
       uploadAppRequestData.append('key', uploadData.data.params.key);
+      uploadAppRequestData.append('x-cos-meta-file-name', uploadOptions.fileName);
       uploadAppRequestData.append('file', fs.createReadStream(uploadOptions.filePath));
 
       uploadOptions.log && console.log(LOG_TAG + ' step2 uploadData signature ' + uploadData.data.params.signature + '\ntoken ' + uploadData.data.params['x-cos-security-token'] + '\nkey ' + uploadData.data.params.key + '\nfile ' + uploadOptions.filePath);
@@ -11453,76 +11454,6 @@ const PGYERAppUploader = __nccwpck_require__(5248);
 
 try {
 
-//   const apiKey = core.getInput('_api_key', { required: true });
-//   if (!apiKey) {
-//     core.warning('apiKey was not set');
-//   }
-
-//   const appFilePath = core.getInput('appFilePath', { required: true });
-//   if (!appFilePath) {
-//     core.warning('appFilePath was not set');
-//   }
-
-//   async function uploadMain(){
-//     var uploadOptions = {
-//       log: true,
-//     }
-
-//     var appObj = JSON.parse(appFilePath);
-//     core.info(`filePath: ${appFilePath}`);
-
-//     var otherParams = [
-//         "buildInstallType",
-//         "buildPassword",
-//         "buildUpdateDescription",
-//         "buildInstallDate",
-//         "buildInstallStartDate",
-//         "buildInstallEndDate",
-//         "buildChannelShortcut"
-//       ];
-
-//     appObj.include.forEach(app => {
-//       otherParams.forEach(name => {
-//         let value = core.getInput(name);
-//         if (value) {
-//           uploadOptions[[name]] = value;
-//           core.info(`set ${name}: ${value}`);
-//         }
-//       });
-          
-//       core.info(`set path ${app.path}`);
-//       uploadOptions.filePath = app.path;
-//       core.info(`file ${app.file}`);
-//       core.info(`apk ${app.apk}`);
-//       core.info(`set channel shortcut ${app.channel}`);
-//       uploadOptions.buildChannelShortcut = app.channel;
-        
-//       const ext = app.path.split('.').pop().toLowerCase();
-//       if (ext == 'ipa') {
-//         uploadOptions.buildType = 'ios';
-//       } else if (ext == 'apk') {
-//         uploadOptions.buildType = 'android';
-//       } else {
-//         core.warning(`Unsupported file type: ${ext}`);
-//       }
-//       core.info(`buildType: ${uploadOptions.buildType}`);
-    
-//       core.info(`all upload options ${JSON.stringify(uploadOptions)}`);
-
-//       uploadFile(apiKey, uploadOptions)
-    
-//     });
-//   }
-
-//   async function uploadFile(apiKey, uploadOptions){
-//     var uploader = new PGYERAppUploader(apiKey);
-//     return uploader.upload(uploadOptions)
-//   }
-
-//   var uploadOptions = {
-//     log: true,
-//   }
-
   const apiKey = core.getInput('_api_key', { required: true });
   if (!apiKey) {
     core.warning('apiKey was not set');
@@ -11564,7 +11495,8 @@ try {
 	  
     core.info(`set path ${app.path}`);
     uploadOptions.filePath = app.path;
-    core.info(`file ${app.file}`);
+    core.info(`set file ${app.file}`);
+    uploadOptions.fileName = app.file;
     core.info(`apk ${app.apk}`);
     core.info(`set channel shortcut ${app.channel}`);
     uploadOptions.buildChannelShortcut = app.channel;
@@ -11584,22 +11516,10 @@ try {
     var uploader = new PGYERAppUploader(apiKey);
     promiseList.push(uploader.upload)
 
-    // var promise = uploader.upload(uploadOptions)
-    // core.info(`promise is ${JSON.stringify(promise)} ${typeof promise}`);
-    // promiseList.push(promise)
-
-    // uploader.upload({ buildType: 'ios', filePath: './app.ipa' }).then(function (data) {
-    //   // code here
-    // }).catch(fucntion (error) {
-    //   // code here
-    // })
-
     // promise.then(function (info) {
     //   core.info(`upload success. app info:`);
     //   core.info(JSON.stringify(info));
-    // }).catch(console.error);
-	
-    
+    // }).catch(console.error);  
 
     core.info(`completed one`);  
   });
@@ -11633,23 +11553,6 @@ try {
 //     core.info(`upload success. app info:`);
 //     core.info(JSON.stringify(result));
 //   });
-
-  function getSomething() {
-    return "something";
-  }
-    
-  async function testAsync() {
-    return Promise.resolve("hello async");
-  }
-    
-  async function test() {
-    const v1 = await getSomething();
-    const v2 = await testAsync();
-    console.log(v1, v2);
-  }
-    
-  test();
-
 
 //   const uploader = new PGYERAppUploader(apiKey);
 //   uploader.upload(uploadOptions).then(function (info) {
