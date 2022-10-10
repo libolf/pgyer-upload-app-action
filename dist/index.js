@@ -11534,6 +11534,7 @@ try {
         return arr[count](optionsArray[count])
       }
       return arr[count](optionsArray[count]).then((result)=>{
+        result.buildShortcutUrl = optionsArray[count].buildChannelShortcut
         allData.push(result.data)
         core.info(`upload success. app info: upload success count ${uploadSuccessCount}`);    
         core.info(JSON.stringify(result));
@@ -11544,12 +11545,47 @@ try {
   }
 
   syncPromise(promiseList, optionsArray).then(result=>{
+    result.buildShortcutUrl = optionsArray[count].buildChannelShortcut
     allData.push(result.data)
     core.info(`upload success. app info:`);
     core.info(JSON.stringify(result));
 
     core.info(`\n\nall data ${JSON.stringify(allData)}`);
+
+    var mailHtml = getHtml(result.data.buildName, result.data.buildIdentifier, result.data.buildVersion, result.data.buildVersionNo)
+
+    allData.forEach(data=>{
+        mailHtml = mailHtml + `<p><strong>文件名：</strong>${data.buildFileName}</p>`
+        var size = parseFloat(data.buildFileSize)
+        size = size/1024/1024
+        mailHtml = mailHtml + `<p><strong>文件大小：</strong>${size}MB</p>`
+        mailHtml = mailHtml + `<p><strong>下载地址：</strong><a href='https://www.pgyer.com/${data.buildShortcutUrl}' target='_blank' class='url'>https://www.pgyer.com/${data.buildShortcutUrl}</a></p>`
+        mailHtml = mailHtml + `<p><strong>二维码地址：</strong><img src="${data.buildQRCodeURL}" alt="二维码" style="zoom: 50%;vertical-align: top;" /></p>`
+    })
+
+    mailHtml = mailHtml + `
+    </body>
+    </html>
+    `
+
+    core.info(mailHtml)
   })
+
+  getHtml() = (buildName, buildIdentifier, buildVersion, buildVersionNo)=>{
+    let html = `
+    <!doctype html>
+    <html>
+    <head>
+    <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+    <title></title>
+    </head>
+    <body>
+    <p><strong>名称：</strong>${buildName}</p>
+    <p><strong>包名：</strong>${buildIdentifier}</p>
+    <p><strong>版本名：</strong>${buildVersion}</p>
+    <p><strong>版本号：</strong>${buildVersionNo}</p>
+    `
+  }
 
 
 //   Promise.all(promiseList).then((info)=>{
