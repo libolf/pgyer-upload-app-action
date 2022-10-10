@@ -11555,8 +11555,7 @@ try {
 
     core.info(`\n\nall data ${JSON.stringify(allData)}`);
 
-    let mailHtml = `
-<!doctype html>
+    let mailHtml = `<!doctype html>
 <html>
 <head>
 <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
@@ -11566,23 +11565,20 @@ try {
 <p><strong>名称：</strong>${result.data.buildName}</p>
 <p><strong>包名：</strong>${result.data.buildIdentifier}</p>
 <p><strong>版本名：</strong>${result.data.buildVersion}</p>
-<p><strong>版本号：</strong>${result.data.buildVersionNo}</p>
-    `
+<p><strong>版本号：</strong>${result.data.buildVersionNo}</p>`
 
     allData.forEach(data=>{
         mailHtml += `<p><strong>文件名：</strong>${data.buildFileName}</p>`
         var size = parseFloat(data.buildFileSize)
         size = size/1024/1024
         mailHtml += `<p><strong>文件大小：</strong>${size.toFixed(2)} MB</p>`
-        mailHtml += `<p><strong>APK版本：</strong>${data.buildShortcutUrl} MB</p>`
+        mailHtml += `<p><strong>APK版本：</strong>${data.buildShortcutUrl}</p>`
         mailHtml += `<p><strong>下载地址：</strong><a href='https://www.pgyer.com/${data.buildShortcutUrl}' target='_blank' class='url'>https://www.pgyer.com/${data.buildShortcutUrl}</a></p>`
         mailHtml += `<p><strong>二维码地址：</strong><img src="${data.buildQRCodeURL}" alt="二维码" style="zoom: 50%;vertical-align: top;" /></p>`
     })
 
-    mailHtml += `
-</body>
-</html>
-    `
+    mailHtml += `</body>
+</html>`
 
     core.info(`\n\n mail html ${mailHtml}`)
 
