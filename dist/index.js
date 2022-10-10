@@ -11524,14 +11524,16 @@ try {
     core.info(`completed one`);  
   });
 
-  
+  var uploadSuccessCount = 0
+
   const syncPromise = function (arr, optionsArray) {
     const _syncLoop = function (count) {
       if (count === arr.length - 1) { // 是最后一个就直接return
         return arr[count](optionsArray[count])
       }
       return arr[count](optionsArray[count]).then((result)=>{
-        console.log(result);
+        core.info(`upload success. app info: upload success count ${uploadSuccessCount}`);    
+        core.info(JSON.stringify(result));
         return _syncLoop(count+1) // 递归调用数组下标
       });
     }
