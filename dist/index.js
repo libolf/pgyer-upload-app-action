@@ -11519,7 +11519,7 @@ try {
 //     return uploader.upload(uploadOptions)
 //   }
 
-  const uploadOptions = {
+  var uploadOptions = {
     log: true,
   }
 
