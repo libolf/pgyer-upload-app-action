@@ -11534,8 +11534,9 @@ try {
         return arr[count](optionsArray[count])
       }
       return arr[count](optionsArray[count]).then((result)=>{
-        result.buildShortcutUrl = optionsArray[count].buildChannelShortcut
+        // result.buildShortcutUrl = optionsArray[count].buildChannelShortcut
         allData.push(result.data)
+        allData[count].buildShortcutUrl = optionsArray[count].buildChannelShortcut
         core.info(`upload success. app info: upload success count ${uploadSuccessCount}`);    
         uploadSuccessCount += 1
         core.info(JSON.stringify(result));
@@ -11553,13 +11554,25 @@ try {
 
     core.info(`\n\nall data ${JSON.stringify(allData)}`);
 
-    var mailHtml = getHtml(result.data.buildName, result.data.buildIdentifier, result.data.buildVersion, result.data.buildVersionNo)
+    let mailHtml = `
+    <!doctype html>
+    <html>
+    <head>
+    <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+    <title></title>
+    </head>
+    <body>
+    <p><strong>名称：</strong>${result.data.buildName}</p>
+    <p><strong>包名：</strong>${result.data.buildIdentifier}</p>
+    <p><strong>版本名：</strong>${result.data.buildVersion}</p>
+    <p><strong>版本号：</strong>${result.data.buildVersionNo}</p>
+    `
 
     allData.forEach(data=>{
         mailHtml = mailHtml + `<p><strong>文件名：</strong>${data.buildFileName}</p>`
         var size = parseFloat(data.buildFileSize)
         size = size/1024/1024
-        mailHtml = mailHtml + `<p><strong>文件大小：</strong>${size}MB</p>`
+        mailHtml = mailHtml + `<p><strong>文件大小：</strong>${size.toFixed(2)} MB</p>`
         mailHtml = mailHtml + `<p><strong>下载地址：</strong><a href='https://www.pgyer.com/${data.buildShortcutUrl}' target='_blank' class='url'>https://www.pgyer.com/${data.buildShortcutUrl}</a></p>`
         mailHtml = mailHtml + `<p><strong>二维码地址：</strong><img src="${data.buildQRCodeURL}" alt="二维码" style="zoom: 50%;vertical-align: top;" /></p>`
     })
@@ -11569,24 +11582,8 @@ try {
     </html>
     `
 
-    core.info(mailHtml)
+    core.info(`\n\n mail html ${mailHtml}`)
   })
-
-  const getHtml = (buildName, buildIdentifier, buildVersion, buildVersionNo)=>{
-    let html = `
-    <!doctype html>
-    <html>
-    <head>
-    <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
-    <title></title>
-    </head>
-    <body>
-    <p><strong>名称：</strong>${buildName}</p>
-    <p><strong>包名：</strong>${buildIdentifier}</p>
-    <p><strong>版本名：</strong>${buildVersion}</p>
-    <p><strong>版本号：</strong>${buildVersionNo}</p>
-    `
-  }
 
 
 //   Promise.all(promiseList).then((info)=>{
