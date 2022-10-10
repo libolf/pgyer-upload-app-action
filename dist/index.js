@@ -11519,9 +11519,9 @@ try {
 //     return uploader.upload(uploadOptions)
 //   }
 
-  var uploadOptions = {
-    log: true,
-  }
+//   var uploadOptions = {
+//     log: true,
+//   }
 
   const apiKey = core.getInput('_api_key', { required: true });
   if (!apiKey) {
@@ -11547,8 +11547,13 @@ try {
   ];
 
   var promiseList = []
+  var optionsArray = []
 
   appObj.include.forEach(app => {
+    var uploadOptions = {
+        log: true,
+    }
+
     otherParams.forEach(name => {
       let value = core.getInput(name);
       if (value) {
@@ -11573,11 +11578,12 @@ try {
       core.warning(`Unsupported file type: ${ext}`);
     }
     core.info(`buildType: ${uploadOptions.buildType}`);
-
     core.info(`all upload options ${JSON.stringify(uploadOptions)}`);
+    optionsArray.push(uploadOptions)
 	  
     var uploader = new PGYERAppUploader(apiKey);
     promiseList.push(uploader.upload)
+
     // var promise = uploader.upload(uploadOptions)
     // core.info(`promise is ${JSON.stringify(promise)} ${typeof promise}`);
     // promiseList.push(promise)
@@ -11599,12 +11605,12 @@ try {
   });
 
   
-  const syncPromise = function (arr) {
+  const syncPromise = function (arr, optionsArray) {
     const _syncLoop = function (count) {
       if (count === arr.length - 1) { // 是最后一个就直接return
-        return arr[count](uploadOptions)
+        return arr[count](optionsArray[count])
       }
-      return arr[count](uploadOptions).then((result)=>{
+      return arr[count](optionsArray[count]).then((result)=>{
         console.log(result);
         return _syncLoop(count+1) // 递归调用数组下标
       });
@@ -11612,7 +11618,7 @@ try {
     return _syncLoop(0);
   }
 
-  syncPromise(promiseList).then(result=>{
+  syncPromise(promiseList, optionsArray).then(result=>{
     core.info(`upload success. app info:`);
     core.info(JSON.stringify(result));
   })
