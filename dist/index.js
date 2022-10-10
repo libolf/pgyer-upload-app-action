@@ -11537,6 +11537,7 @@ try {
         result.buildShortcutUrl = optionsArray[count].buildChannelShortcut
         allData.push(result.data)
         core.info(`upload success. app info: upload success count ${uploadSuccessCount}`);    
+        uploadSuccessCount += 1
         core.info(JSON.stringify(result));
         return _syncLoop(count+1) // 递归调用数组下标
       });
@@ -11545,7 +11546,7 @@ try {
   }
 
   syncPromise(promiseList, optionsArray).then(result=>{
-    result.buildShortcutUrl = optionsArray[count].buildChannelShortcut
+    result.buildShortcutUrl = optionsArray[uploadSuccessCount].buildChannelShortcut
     allData.push(result.data)
     core.info(`upload success. app info:`);
     core.info(JSON.stringify(result));
@@ -11571,7 +11572,7 @@ try {
     core.info(mailHtml)
   })
 
-  getHtml() = (buildName, buildIdentifier, buildVersion, buildVersionNo)=>{
+  const getHtml = (buildName, buildIdentifier, buildVersion, buildVersionNo)=>{
     let html = `
     <!doctype html>
     <html>
