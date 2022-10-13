@@ -11463,6 +11463,8 @@ try {
   if (!appFilePath) {
     core.warning('appFilePath was not set');
   }
+
+  const description = core.getInput('description', { required: true });
 	
   var appObj = JSON.parse(appFilePath);
   core.info(`filePath: ${appFilePath}`);
@@ -11568,10 +11570,12 @@ try {
 <p><strong>版本号：</strong>${result.data.buildVersionNo}</p>`
 
     
-    if(appObj.hasOwnProperty("description")){
-        var description = JSON.parse(appObj.description)
-        if(description.length > 0 && description[0].versionNo === parseInt(allData[0].buildVersionNo) && description[0].version == allData[0].buildVersion){
-            mailHtml += `<p><strong>更新说明：</strong>${description[0].description}</p>`
+    if(Object.keys(description).length === 0){
+        core.info(`not set update description`);
+    }else{
+        var descriptionObj = JSON.parse(description)
+        if(descriptionObj.length > 0 && descriptionObj[0].versionNo === parseInt(allData[0].buildVersionNo) && descriptionObj[0].version == allData[0].buildVersion){
+            mailHtml += `<p><strong>更新说明：</strong>${descriptionObj[0].description}</p>`
         }
     }
 
