@@ -11567,6 +11567,14 @@ try {
 <p><strong>版本名：</strong>${result.data.buildVersion}</p>
 <p><strong>版本号：</strong>${result.data.buildVersionNo}</p>`
 
+    
+    if(appObj.hasOwnProperty("description")){
+        var description = JSON.parse(appObj.description)
+        if(description.length > 0 && description[0].versionNo === parseInt(allData[0].buildVersionNo) && description[0].version == allData[0].buildVersion){
+            mailHtml += `<p><strong>更新说明：</strong>${description[0].description}</p>`
+        }
+    }
+
     allData.forEach(data=>{
         mailHtml += `<p><strong>文件名：</strong>${data.buildFileName}</p>`
         var size = parseFloat(data.buildFileSize)
