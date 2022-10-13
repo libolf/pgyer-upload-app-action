@@ -11464,7 +11464,7 @@ try {
     core.warning('appFilePath was not set');
   }
 
-  const description = core.getInput('description', { required: true });
+  const description = core.getInput('description', { required: false });
 	
   var appObj = JSON.parse(appFilePath);
   core.info(`filePath: ${appFilePath}`);
@@ -11575,7 +11575,7 @@ try {
     }else{
         var descriptionObj = JSON.parse(description)
         if(descriptionObj.length > 0 && descriptionObj[0].versionNo === parseInt(allData[0].buildVersionNo) && descriptionObj[0].version == allData[0].buildVersion){
-            mailHtml += `<p><strong>更新说明：</strong>${descriptionObj[0].description}</p>` 
+            mailHtml += `<p><strong>更新说明：</strong>${descriptionObj[0].description}</p>`
         }
     }
 
